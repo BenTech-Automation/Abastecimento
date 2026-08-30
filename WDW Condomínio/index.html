@@ -38,7 +38,6 @@ body{
 }
 @supports (-webkit-touch-callout:none){html,body{height:-webkit-fill-available}}
 .wrap{max-width:420px;margin:0 auto}
-
 /* ===== Cabeçalho ===== */
 .header{
   display:flex;align-items:center;justify-content:center;gap:10px;
@@ -51,7 +50,6 @@ body{
   margin:0;font-size:20px;font-weight:700;color:#f0f8ff;letter-spacing:.2px;
   white-space:nowrap;line-height:1.2;
 }
-
 /* ===== Cartões ===== */
 .card{
   background:var(--card);border:1px solid var(--border);
@@ -68,7 +66,6 @@ body{
 }
 .card-title h2{margin:0;font-size:13.5px;font-weight:700;color:#dcecf7;letter-spacing:.3px;text-transform:uppercase}
 .card-desc{margin:2px 0 14px;font-size:12px;color:var(--text-dim);line-height:1.45}
-
 .pill{
   display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
   padding:5px 11px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.2px;
@@ -77,7 +74,6 @@ body{
 .pill .d{width:6px;height:6px;border-radius:50%;background:currentColor}
 .on{background:var(--ok-bg);color:var(--ok)}
 .off{background:var(--danger-bg);color:#ff8f8f}
-
 /* ===== Níveis ===== */
 .level{margin-bottom:14px}
 .level:last-child{margin-bottom:2px}
@@ -95,23 +91,22 @@ body{
   font-size:11.5px;color:var(--text-dim);line-height:1.4
 }
 .level-note svg{flex-shrink:0;margin-top:1px;color:var(--accent)}
-
 /* ===== Controles ===== */
 .field-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
 label.field-label{font-size:11px;color:var(--text-faint);font-weight:600;letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px;display:block}
-select,input[type=time]{
+select,input[type=time],input[type=text]{
   font-family:inherit;font-size:13px;font-weight:600;color:var(--text);
   background:rgba(0,30,60,.4);border:1px solid var(--border);
   border-radius:var(--radius-sm);padding:10px 6px;outline:none;
   transition:border-color .15s;box-sizing:border-box;
 }
-select:focus,input[type=time]:focus{border-color:var(--border-strong)}
+select:focus,input[type=time]:focus,input[type=text]:focus{border-color:var(--border-strong)}
 select{
   cursor:pointer;width:130px;min-width:130px;max-width:130px;flex:none;
   -webkit-appearance:none;appearance:none;
 }
 input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
-
+input[type=text]{width:100%;min-width:0;flex:1}
 .btn{
   font-family:inherit;font-size:13.5px;font-weight:700;border:none;border-radius:var(--radius-sm);
   padding:12px 16px;cursor:pointer;flex:1;min-width:100px;
@@ -119,22 +114,22 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
   transition:filter .15s,transform .12s;letter-spacing:.2px;
 }
 .btn:active{filter:brightness(.9);transform:scale(.97)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .btn-on{background:linear-gradient(155deg,#48e0a0,#2fb87f);color:#053323}
 .btn-off{background:linear-gradient(155deg,#ff8080,#f04a4a);color:#3a0a0a}
 .btn-save{background:linear-gradient(155deg,var(--accent),var(--accent-2));color:#052235;flex:none;padding:10px 14px}
 .btn-row{display:flex;gap:10px;margin-top:2px}
-
 .msg{
   display:none;margin-top:10px;font-size:12px;text-align:center;
   background:rgba(79,195,255,.12);border:1px solid rgba(79,195,255,.28);
   border-radius:var(--radius-sm);padding:8px 10px;color:#d6eefc;font-weight:600;
 }
-
+.msg.err{
+  background:var(--danger-bg);border-color:rgba(255,107,107,.35);color:#ffc9c9;
+}
 .times{display:flex;align-items:flex-end;justify-content:flex-start;gap:8px;flex-wrap:wrap;margin:0;flex:1;min-width:0}
 .times label,.time-label{font-size:11px;color:var(--text-faint);font-weight:600;text-transform:uppercase;letter-spacing:.3px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-
 .footer-note{text-align:center;font-size:11px;color:var(--text-faint);margin-top:6px;letter-spacing:.2px}
-
 /* Tela de bloqueio — mesmo visual da página locked do firmware */
 #lockedScreen{
   display:none;position:fixed;top:0;left:0;right:0;bottom:0;
@@ -146,6 +141,16 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
 #lockedScreen p{
   color:#073fa3;font-size:20px;font-weight:bold;margin:0;padding:20px
 }
+/* Card de usuário */
+#userCard .field-row{align-items:flex-end}
+#userCard input[type=text]{padding:10px 12px}
+#userCard .user-connected{
+  display:none;align-items:center;justify-content:space-between;gap:10px;width:100%;
+}
+#userCard .user-connected .user-label{
+  font-size:13px;font-weight:600;color:var(--text);word-break:break-all;
+}
+#userCard .user-connected .user-label span{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -153,15 +158,36 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
   <div id="lockedScreen">
     <p>Entre em contato com a<br>BenTech</p>
   </div>
-
   <!-- Conteúdo normal -->
   <div id="mainContent" class="wrap">
-
     <div class="header">
       <img src="https://bentech-automation.github.io/Abastecimento/logo.png" alt="BenTech">
       <h1>Controle de Abastecimento</h1>
     </div>
-
+    <!-- Card Usuário -->
+    <div class="card" id="userCard">
+      <div class="card-head">
+        <div class="card-title">
+          <div class="card-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h2>Usuário</h2>
+        </div>
+      </div>
+      <p class="card-desc">Informe o identificador do dispositivo para conectar</p>
+      <div id="userForm" class="field-row">
+        <div style="flex:1;min-width:0">
+          <label class="field-label" for="userInput">Usuário</label>
+          <input type="text" id="userInput" placeholder="Seu acesso" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn btn-save" id="btnConectar" onclick="conectarUsuario()">Conectar</button>
+      </div>
+      <div id="userConnected" class="user-connected">
+        <div class="user-label">Usuário: <span id="userDisplay"></span></div>
+        <button class="btn btn-save" style="flex:none;padding:8px 12px;font-size:12px" onclick="trocarUsuario()">Trocar</button>
+      </div>
+      <p id="userMsg" class="msg"></p>
+    </div>
     <div class="card">
       <div class="card-head">
         <div class="card-title">
@@ -172,7 +198,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         </div>
       </div>
       <p class="card-desc">Leitura em tempo real da caixa d'água e do reservatório</p>
-
       <div class="level">
         <div class="level-top"><span>Caixa d'Água</span><b id="waterTankValue">0%</b></div>
         <div class="bar"><div id="waterTankLevel" class="fill">0%</div></div>
@@ -181,13 +206,11 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         <div class="level-top"><span>Reservatório</span><b id="reservoirValue">0%</b></div>
         <div class="bar"><div id="reservoirLevel" class="fill">0%</div></div>
       </div>
-
       <div class="level-note">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         <span>O acionamento automático só ocorre com o reservatório entre 50% e 100%</span>
       </div>
     </div>
-
     <div class="card">
       <div class="card-head">
         <div class="card-title">
@@ -202,7 +225,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         </div>
       </div>
       <p class="card-desc">Liga a bomba quando a caixa atingir o nível selecionado</p>
-
       <div class="field-row">
         <div style="flex:1;min-width:0">
           <label class="field-label" for="selector">Nível para ligar</label>
@@ -218,7 +240,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
       </div>
       <p id="saveMsg" class="msg"></p>
     </div>
-
     <div class="card">
       <div class="card-head">
         <div class="card-title">
@@ -230,7 +251,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         <span id="scheduleStatus" class="pill off"><span class="d"></span>Desativado</span>
       </div>
       <p class="card-desc">Restringe o período em que o sistema pode ser acionado</p>
-
       <div class="field-row">
         <div style="display:flex;align-items:flex-end;justify-content:space-between;width:100%;flex-wrap:nowrap">
           <div>
@@ -249,7 +269,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
       </div>
       <p id="scheduleMsg" class="msg"></p>
     </div>
-
     <div class="card">
       <div class="card-head">
         <div class="card-title">
@@ -261,7 +280,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         <span id="pumpStatus" class="pill off"><span class="d"></span>Desligado</span>
       </div>
       <p class="card-desc">Ligue ou desligue a bomba manualmente</p>
-
       <div class="btn-row">
         <button class="btn btn-on" onclick="sendCommand('pump:on', true)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5Z"/></svg>Ligar
@@ -272,7 +290,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
       </div>
       <p id="msg" class="msg"></p>
     </div>
-
     <div class="card">
       <div class="card-head">
         <div class="card-title">
@@ -284,7 +301,6 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         <span id="deviceStatus" class="pill off"><span class="d"></span>Desligado</span>
       </div>
       <p class="card-desc">Controla um equipamento extra conectado ao sistema</p>
-
       <div class="btn-row">
         <button class="btn btn-on" onclick="sendCommand('device:on', true, 'deviceStatus')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5Z"/></svg>Ligar
@@ -294,17 +310,17 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         </button>
       </div>
     </div>
-
     <p class="footer-note">BenTech · Soluções em Automação</p>
   </div>
-
   <script>
-    const CLIENTE = "David";
-    const base = `Bentech/${CLIENTE}/abastecimento`;
-    const topicCmd = `${base}/cmd`;
-    const topicStatus = `${base}/status`;
-    const topicTrigger = `${base}/trigger`;
-    const topicLocked = `${base}/locked`;
+    let CLIENTE = sessionStorage.getItem('bentech_cliente') || "";
+    let base, topicCmd, topicStatus, topicTrigger, topicLocked;
+    let client = null;
+    let isLocked = false;
+    let validatingUser = false;
+    let validationTimer = null;
+    const VALIDATION_TIMEOUT_MS = 7000;
+
     const mqttBroker = 'wss://u4182f38.ala.us-east-1.emqxsl.com:8084/mqtt';
     const options = {
       clientId: 'web_' + Math.random().toString(16).substr(2, 8),
@@ -314,8 +330,181 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
       reconnectPeriod: 3000,
       clean: true
     };
-    const client = mqtt.connect(mqttBroker, options);
-    let isLocked = false;
+
+    function atualizarTopicos() {
+      base = `Bentech/${CLIENTE}/abastecimento`;
+      topicCmd = `${base}/cmd`;
+      topicStatus = `${base}/status`;
+      topicTrigger = `${base}/trigger`;
+      topicLocked = `${base}/locked`;
+    }
+
+    function setConnectBusy(busy) {
+      const btn = document.getElementById('btnConectar');
+      const input = document.getElementById('userInput');
+      if (btn) {
+        btn.disabled = busy;
+        btn.textContent = busy ? 'Aguardando…' : 'Conectar';
+      }
+      if (input) input.disabled = busy;
+    }
+
+    function atualizarUIUsuario() {
+      const form = document.getElementById('userForm');
+      const connected = document.getElementById('userConnected');
+      const display = document.getElementById('userDisplay');
+      if (CLIENTE && !validatingUser) {
+        form.style.display = 'none';
+        connected.style.display = 'flex';
+        display.textContent = 'Conectado';
+      } else {
+        form.style.display = 'flex';
+        connected.style.display = 'none';
+      }
+    }
+
+    function limparValidacao() {
+      if (validationTimer) {
+        clearTimeout(validationTimer);
+        validationTimer = null;
+      }
+      validatingUser = false;
+      setConnectBusy(false);
+    }
+
+    function falhaUsuarioNaoEncontrado() {
+      limparValidacao();
+      if (client) {
+        try { client.end(true); } catch(e) {}
+        client = null;
+      }
+      CLIENTE = "";
+      sessionStorage.removeItem('bentech_cliente');
+      atualizarUIUsuario();
+      showTempMessage('userMsg', 'Usuário não encontrado', 3500, true);
+    }
+
+    function sucessoValidacao() {
+      if (!validatingUser) return;
+      limparValidacao();
+      sessionStorage.setItem('bentech_cliente', CLIENTE);
+      atualizarUIUsuario();
+      showTempMessage('userMsg', 'Conectado!', 2500);
+      vibrateDevice();
+    }
+
+    function conectarUsuario() {
+      if (validatingUser) return;
+      const input = document.getElementById('userInput');
+      const val = (input.value || '').trim();
+      if (!val) {
+        showTempMessage('userMsg', 'Informe o usuário', 2500, true);
+        return;
+      }
+      CLIENTE = val;
+      validatingUser = true;
+      setConnectBusy(true);
+      showTempMessage('userMsg', 'Verificando…', 6000);
+      iniciarMQTT(true);
+      validationTimer = setTimeout(() => {
+        if (validatingUser) falhaUsuarioNaoEncontrado();
+      }, VALIDATION_TIMEOUT_MS);
+    }
+
+    function trocarUsuario() {
+      limparValidacao();
+      if (client) {
+        try { client.end(true); } catch(e) {}
+        client = null;
+      }
+      CLIENTE = "";
+      sessionStorage.removeItem('bentech_cliente');
+      atualizarUIUsuario();
+      document.getElementById('userInput').value = '';
+      document.getElementById('userInput').focus();
+    }
+
+    function iniciarMQTT(fromValidation) {
+      if (!CLIENTE) return;
+      atualizarTopicos();
+      if (client) {
+        try { client.end(true); } catch(e) {}
+        client = null;
+      }
+      client = mqtt.connect(mqttBroker, options);
+      client.on('connect', () => {
+        console.log("MQTT WebSocket conectado!");
+        client.subscribe([topicStatus, topicTrigger, topicLocked], (err) => {
+          if (!err) console.log("Subscrito com sucesso");
+          client.publish(topicCmd, "get_trigger");
+        });
+      });
+      client.on('error', (err) => {
+        console.error("Erro MQTT:", err);
+        if (validatingUser) {
+          falhaUsuarioNaoEncontrado();
+        } else {
+          showTempMessage('msg', 'Erro de conexão MQTT', 3000);
+        }
+      });
+      client.on('message', (topic, message) => {
+        const payload = message.toString();
+        console.log(topic, payload);
+
+        // Qualquer resposta do dispositivo (status ou trigger) confirma usuário válido
+        if (validatingUser && (topic === topicStatus || topic === topicTrigger || topic === topicLocked)) {
+          sucessoValidacao();
+        }
+
+        if (topic === topicStatus) {
+          try {
+            const data = JSON.parse(payload);
+            if (data.locked !== undefined) {
+              updateLockedUI(data.locked === true || data.locked === "true");
+            }
+            if (data.waterTankLevel !== undefined) updateBar('waterTankLevel', data.waterTankLevel);
+            if (data.reservoirLevel !== undefined) updateBar('reservoirLevel', data.reservoirLevel);
+            if (data.pumpStatus !== undefined) updateStatus('pumpStatus', data.pumpStatus);
+            if (data.deviceStatus !== undefined) updateStatus('deviceStatus', data.deviceStatus);
+            if (data.Msg) {
+              showTempMessage('msg', data.Msg, 3000);
+            }
+            if (data.saveMsg) {
+              showTempMessage('saveMsg', data.saveMsg, 2000);
+            }
+            if (data.triggerLevel !== undefined) {
+              document.getElementById('selector').value = (data.triggerLevel >= 99 ? 99 : data.triggerLevel);
+            }
+            if (data.scheduleEnabled !== undefined) {
+              document.getElementById("scheduleEnable").value = data.scheduleEnabled ? "1" : "0";
+              let statusEl = document.getElementById("scheduleStatus");
+              statusEl.innerHTML = '<span class="d"></span>' + (data.scheduleEnabled ? "Ativado" : "Desativado");
+              statusEl.className = "pill " + (data.scheduleEnabled ? "on" : "off");
+            }
+            if (data.scheduleStart !== undefined) {
+              document.getElementById("startTime").value = data.scheduleStart;
+            }
+            if (data.scheduleEnd !== undefined) {
+              document.getElementById("endTime").value = data.scheduleEnd;
+            }
+            if (data.scheduleMsg) {
+              showTempMessage('scheduleMsg', data.scheduleMsg, 2000);
+            }
+          } catch (e) {
+            console.error("JSON inválido no status:", e);
+          }
+        }
+        if (topic === topicLocked) {
+          updateLockedUI(payload === "1" || payload === "true");
+        }
+        if (topic === topicTrigger) {
+          let val = parseInt(payload, 10);
+          if (isNaN(val)) val = 25;
+          document.getElementById('selector').value = (val >= 99 ? 99 : val);
+        }
+      });
+    }
+
     function updateLockedUI(locked) {
       isLocked = locked;
       const lockedScreen = document.getElementById('lockedScreen');
@@ -328,69 +517,12 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         mainContent.style.display = 'block';
       }
     }
-    client.on('connect', () => {
-      console.log("MQTT WebSocket conectado!");
-      client.subscribe([topicStatus, topicTrigger, topicLocked], (err) => {
-        if (!err) console.log("Subscrito com sucesso");
-        client.publish(topicCmd, "get_trigger");
-      });
-    });
-    client.on('error', (err) => {
-      console.error("Erro MQTT:", err);
-      showTempMessage('msg', 'Erro de conexão MQTT', 3000);
-    });
-    client.on('message', (topic, message) => {
-      const payload = message.toString();
-      console.log(topic, payload);
-      if (topic === topicStatus) {
-        try {
-          const data = JSON.parse(payload);
-          if (data.locked !== undefined) {
-            updateLockedUI(data.locked === true || data.locked === "true");
-          }
-          if (data.waterTankLevel !== undefined) updateBar('waterTankLevel', data.waterTankLevel);
-          if (data.reservoirLevel !== undefined) updateBar('reservoirLevel', data.reservoirLevel);
-          if (data.pumpStatus !== undefined) updateStatus('pumpStatus', data.pumpStatus);
-          if (data.deviceStatus !== undefined) updateStatus('deviceStatus', data.deviceStatus);
-          if (data.Msg) {
-            showTempMessage('msg', data.Msg, 3000);
-          }
-          // NOVO: trata saveMsg do nível de acionamento (vindo da página local ou do próprio dispositivo)
-          if (data.saveMsg) {
-            showTempMessage('saveMsg', data.saveMsg, 2000);
-          }
-          if (data.triggerLevel !== undefined) {
-            document.getElementById('selector').value = (data.triggerLevel >= 99 ? 99 : data.triggerLevel);
-          }
-          if (data.scheduleEnabled !== undefined) {
-            document.getElementById("scheduleEnable").value = data.scheduleEnabled ? "1" : "0";
-            let statusEl = document.getElementById("scheduleStatus");
-            statusEl.innerHTML = '<span class="d"></span>' + (data.scheduleEnabled ? "Ativado" : "Desativado");
-            statusEl.className = "pill " + (data.scheduleEnabled ? "on" : "off");
-          }
-          if (data.scheduleStart !== undefined) {
-            document.getElementById("startTime").value = data.scheduleStart;
-          }
-          if (data.scheduleEnd !== undefined) {
-            document.getElementById("endTime").value = data.scheduleEnd;
-          }
-          if (data.scheduleMsg) {
-            showTempMessage('scheduleMsg', data.scheduleMsg, 2000);
-          }
-        } catch (e) {
-          console.error("JSON inválido no status:", e);
-        }
-      }
-      if (topic === topicLocked) {
-        updateLockedUI(payload === "1" || payload === "true");
-      }
-      if (topic === topicTrigger) {
-        let val = parseInt(payload, 10);
-        if (isNaN(val)) val = 25;
-        document.getElementById('selector').value = (val >= 99 ? 99 : val);
-      }
-    });
+
     function sendCommand(cmd, state, statusId = 'pumpStatus') {
+      if (!CLIENTE || !client) {
+        showTempMessage('msg', 'Conecte um usuário primeiro', 2500);
+        return;
+      }
       if (isLocked) {
         showTempMessage('msg', 'Dispositivo bloqueado', 2500);
         return;
@@ -402,7 +534,12 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         showTempMessage('msg', 'Sem conexão MQTT', 3000);
       }
     }
+
     function saveValue() {
+      if (!CLIENTE || !client) {
+        showTempMessage('saveMsg', 'Conecte um usuário primeiro', 2500);
+        return;
+      }
       if (isLocked) {
         showTempMessage('saveMsg', 'Dispositivo bloqueado', 2500);
         return;
@@ -414,10 +551,14 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
       const val = document.getElementById('selector').value;
       client.publish(topicCmd, `trigger:${val}`);
       vibrateDevice();
-      // Feedback imediato local; a confirmação cruzada também chegará via status (saveMsg)
       showTempMessage('saveMsg', 'Salvo!', 2000);
     }
+
     function saveSchedule() {
+      if (!CLIENTE || !client) {
+        showTempMessage('scheduleMsg', 'Conecte um usuário primeiro', 2500);
+        return;
+      }
       if (isLocked) {
         showTempMessage('scheduleMsg', 'Dispositivo bloqueado', 2500);
         return;
@@ -433,16 +574,23 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
       client.publish(topicCmd, "schedule:" + enabled + ":" + start + ":" + end);
       showTempMessage('scheduleMsg', 'Salvo!', 2000);
     }
+
     function vibrateDevice() {
       if ("vibrate" in navigator) navigator.vibrate(50);
     }
-    function showTempMessage(id, text, time = 2000) {
+
+    function showTempMessage(id, text, time = 2000, isError = false) {
       const el = document.getElementById(id);
       if (!el) return;
       el.innerText = text;
+      el.className = isError ? 'msg err' : 'msg';
       el.style.display = 'block';
-      setTimeout(() => el.style.display = 'none', time);
+      setTimeout(() => {
+        el.style.display = 'none';
+        el.className = 'msg';
+      }, time);
     }
+
     function updateBar(id, v) {
       const el = document.getElementById(id);
       v = Math.round(v);
@@ -454,11 +602,22 @@ input[type=time]{width:90px;min-width:90px;max-width:90px;flex:none}
         document.getElementById('reservoirValue').textContent = v + '%';
       }
     }
+
     function updateStatus(id, state) {
       const el = document.getElementById(id);
       el.innerHTML = '<span class="d"></span>' + (state ? 'Ligado' : 'Desligado');
       el.className = 'pill ' + (state ? 'on' : 'off');
     }
+
+    // Inicialização — se já houver usuário na sessão, reconecta sem validação de timeout
+    atualizarUIUsuario();
+    if (CLIENTE) {
+      iniciarMQTT(false);
+    }
+
+    document.getElementById('userInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') conectarUsuario();
+    });
   </script>
 </body>
 </html>
